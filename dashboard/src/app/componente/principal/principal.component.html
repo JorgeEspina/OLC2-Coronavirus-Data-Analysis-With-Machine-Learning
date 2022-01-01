@@ -193,10 +193,10 @@
                 <p class="text-sm">
                     {{Reporte.conclusion }}
                 </p>
-                <p class="text-sm" *ngIf="isComparation">
+                <p class="text-sm" *ngIf="isComparation||isComparation1">
                   {{Reporte.conclusion1 }}
                 </p>
-                <p class="text-sm" *ngIf="isComparation||isComparation1">
+                <p class="text-sm" *ngIf="isComparation1">
                   {{Reporte.conclusion2 }}
                 </p>
                 <hr class="horizontal gray-light my-4">
@@ -331,11 +331,23 @@
                                     <div class="mb-3">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var10" placeholder="Encabezado de Genero/Hombre/Mujer " name="var10" aria-label="Variable 10" >
                                     </div>
-                                    <!--<div class="mb-3">
-                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var11" placeholder="Genero" name="var11" aria-label="Variable 11" >
-                                    </div>-->
+                                    <div class="mb-3">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var11" placeholder="Encabezado de Continente" name="var11" aria-label="Variable 11" >
+                                    </div>
+                                    <div class="mb-3">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var13" placeholder="Nombre de Continente" name="var13" aria-label="Variable 11" >
+                                    </div>
                                     <div class="mb-3">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var12" placeholder="Encabezado de Edad" name="var12" aria-label="Variable 12" >
+                                    </div>
+                                    <div class="mb-3">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var14" placeholder="Encabezado de Fecha" name="var14" aria-label="Variable 14" >
+                                    </div>
+                                    <div class="mb-3">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var15" placeholder="Encabezado de Resultados Entregados" name="var15" aria-label="Variable 15" >
+                                    </div>
+                                    <div class="mb-3">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var16" placeholder="Encabezado de Nuevos Casos" name="var16" aria-label="Variable 16" >
                                     </div>
                                    
                                     <div class="text-center">

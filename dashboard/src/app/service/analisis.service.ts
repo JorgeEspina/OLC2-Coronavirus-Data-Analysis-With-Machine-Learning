@@ -85,6 +85,9 @@ export class AnalisisService {
   AnalisisReporte21(reporte21:Reporte1): Observable<Reporte1> {
     return this.http.post('http://127.0.0.1:5000/Analisis_Reporte21',reporte21);
   }
+  AnalisisReporte211(reporte21:Reporte1): Observable<Reporte1> {
+    return this.http.post('http://127.0.0.1:5000/Analisis_Reporte211',reporte21);
+  }
   AnalisisReporte22(reporte22:Reporte1): Observable<Reporte1> {
     return this.http.post('http://127.0.0.1:5000/Analisis_Reporte22',reporte22);
   }

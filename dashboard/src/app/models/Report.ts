@@ -11,6 +11,10 @@ export interface Reporte1 {
     var10?: string;
     var11?: string;
     var12?: string;
+    var13?: string;
+    var14?: string;
+    var15?: string;
+    var16?: string;
     Datos?: string;
     grupo?: string;
     image64?:string;

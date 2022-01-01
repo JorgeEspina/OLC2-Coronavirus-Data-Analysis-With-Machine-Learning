@@ -151,7 +151,7 @@ def Reporte1():
     #plot.show()
     return jsonify({"message":"Analisis Realizado de Reporte1","image64":my_string.decode('utf-8'),"conclusion":conclusion})
  
-#Predicción de Infertados en un País.
+#Predicción de Infectados en un País.
 @app.route('/Analisis_Reporte2', methods = ['POST']) 
 def Reporte2():
     body = {
@@ -221,7 +221,7 @@ def Reporte2():
 
     x_new_transform = polynomial_features.fit_transform(x_new)
     y_new = model.predict(x_new_transform)
-
+    prediction = y_new[np.size(y_new)-1]
     # Plot de la grafica
     #dataset.plot(x='Dias', y='Infectados', style='o')
     plot.plot(x_new, y_new, color='red', linewidth=3)
@@ -242,20 +242,84 @@ def Reporte2():
     plot.close()
     #print(my_string.decode('utf-8'))
     #plot.show()
-    conclusion = 'Predicción de Infectados en '+pais + ' con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)
+    conclusion = 'Predicción de Infectados en '+pais + ' con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)  + ' con una prediccion de '+str(DiasPredicion)+' dias despues la cual es '+str(prediction)
     return jsonify({"message":"Analisis Realizado de Reporte2","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
-#Indice de Progresión de la pandemia. --->falta
+#Indice de Progresión de la pandemia.                       
 @app.route('/Analisis_Reporte3', methods = ['POST']) 
 def Reporte3():
+    body = {
+        "var3":request.json['var3']
+    }
+    encabezadoConfirmados = body['var3']
+    
+    print(body)
+    # data 
+    
+    ''' comienza filtro para pais''' 
+    print(encabezadoConfirmados)
+
+    Datos =  dataset[encabezadoConfirmados]
+    #Datos = pd.DataFrame(Datos)
+
+    print(Datos.count()) 
+
+    vdias = []    
+    for i in range(Datos.count()):
+        vdias.append(i)
+    
+    #print(vdias)
+    Dias = Datos.count()
+    print(Dias)
+    vconfirmados = []
+    for z in range(Dias):
+        vconfirmados.append(Datos.iloc[z])
+    #print(vmuertos)
+
+    y_new_max = max(vconfirmados)
+    x = np.asarray(vdias)[:,np.newaxis]
+    y = np.asarray(vconfirmados)[:,np.newaxis]
+
+
+    # Procedemos a entrenar el modelo
+    model = LinearRegression().fit(x, y)
+    # calculamos la varianza ,rmse y r2
+    y_new = model.predict(x)
+
+    rmse = np.sqrt(mean_squared_error(y, y_new))
+    r2 = r2_score(y, y_new)
+
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+
+
+    # Prediccion desde el dia 0 hasta el dia que solicite
+    x_new_min = 0.0
+    x_new_max = Dias
+
+    # Plot de la grafica
+    plot.xlim(x_new_min, x_new_max, Dias)
+    plot.ylim(0,y_new_max+5000)
+
+    plot.grid()
+   
+    title = 'Modelo : Y = {}; X+{}; RMSE = {}; R2 = {}'.format(str(model.coef_[0][0]),str(model.intercept_[0]),round(rmse,2), round(r2,2))
+    plot.title('Indice de Progresión de la pandemia.' + title, fontsize=10)
+    plot.xlabel('Dias')
+    plot.ylabel('No. Casos Confirmados')
+    plot.scatter(x, y)
+    plot.plot(x, y_new, color='red')
+    plot.legend(('Regresion Lineal','Datos'))
+
+
     # use savefig() before show().
     plot.savefig("Reporte3.png")
-    with open("Reporte2.png", "rb") as img_file:
+    with open("Reporte3.png", "rb") as img_file:
         my_string =  base64.b64encode(img_file.read())
     img_file.close()
     plot.close()
     #plot.show()
-    conclusion = 'Predicción de Infectados en '
+    conclusion = 'Indice de Progresión de la pandemia.Modelo : Y = {}; X+{}; RMSE = {}; R2 = {}'.format(str(model.coef_[0][0]),str(model.intercept_[0]),round(rmse,2), round(r2,2))
     return jsonify({"message":"Analisis Realizado de Reporte 3","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
 #Predicción de mortalidad por COVID en un Departamento.
@@ -285,7 +349,6 @@ def Reporte4():
     Todosinfectados = Datos[encabezadoMuertes]
     print(Todosinfectados.count())
     vdias = []
-    t= 0
     for i in range(Todosinfectados.count()):
         vdias.append(i)
     
@@ -328,13 +391,13 @@ def Reporte4():
 
     x_new_transform = polynomial_features.fit_transform(x_new)
     y_new = model.predict(x_new_transform)
-
+    prediction = y_new[np.size(y_new)-1]
     # Plot de la grafica
     #dataset.plot(x='Dias', y='Infectados', style='o')
     plot.plot(x_new, y_new, color='red', linewidth=3)
     plot.grid()
     plot.xlim(x_new_min,x_new_max)
-    plot.ylim(0,y_new_max)
+    plot.ylim(0,y_new_max+100)
     title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
     plot.title('Predicción de mortalidad por Covid-19 en el Departamento de  '+departamento+"\n " + title, fontsize=10)
     plot.xlabel('Dias')
@@ -348,7 +411,7 @@ def Reporte4():
     img_file.close() 
     plot.close()
     #plot.show()
-    conclusion ='Predicción de mortalidad por Covid-19 en el Departamento de '+departamento + ' con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)
+    conclusion ='Predicción de mortalidad por Covid-19 en el Departamento de '+departamento + ' con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)  + ' con una prediccion de '+str(DiasPredicion)+' dias despues la cual es '+str(prediction)
     return jsonify({"message":"Analisis Realizado de Reporte 4","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
 #Predicción de mortalidad por COVID en un País.
@@ -422,7 +485,7 @@ def Reporte5():
 
     x_new_transform = polynomial_features.fit_transform(x_new)
     y_new = model.predict(x_new_transform)
-
+    prediction = y_new[np.size(y_new)-1]
     # Plot de la grafica
     #dataset.plot(x='Dias', y='Infectados', style='o')
     plot.plot(x_new, y_new, color='red', linewidth=3)
@@ -441,7 +504,7 @@ def Reporte5():
     img_file.close()
     plot.close()
     #plot.show()
-    conclusion ='Predicción de mortalidad por Covid-19 en '+pais + ' con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)
+    conclusion ='Predicción de mortalidad por Covid-19 en '+pais + ' en un año con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)  + + ' con una prediccion de '+DiasPredicion+' dias despues la cual es '+str(prediction)
     return jsonify({"message":"Analisis Realizado de Reporte 5","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
 #Análisis del número de muertes por coronavirus en un País.
@@ -677,18 +740,21 @@ def Reporte8():
 
     print('RMSE: ', rmse)
     print('R2: ', r2)
+    val_rmse = rmse
+    val_r2 = r2
 
+    
     # Prediccion desde el dia 0 hasta el dia que solicite
     x_new_min = 0.0
     x_new_max = 365
-
+    
 
     x_new = np.linspace(x_new_min, x_new_max, Dias)
-    x_new = x_new[:,np.newaxis]
+    x_new = x_new[:,np.newaxis] 
 
     x_new_transform = polynomial_features.fit_transform(x_new)
     y_new = model.predict(x_new_transform)
-
+    prediction = y_new[np.size(y_new)-1]
     # Plot de la grafica
     #dataset.plot(x='Dias', y='Infectados', style='o')
     plot.plot(x_new, y_new, color='red', linewidth=3)
@@ -708,7 +774,7 @@ def Reporte8():
     img_file.close()
     plot.close()
     #plot.show()
-    conclusion = 'Predicción de casos de un país para un año.'
+    conclusion = 'Predicción de casos de un '+pais + ' en un año con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)  + ' con una prediccion de 1 año despues la cual es '+str(prediction)
     return jsonify({"message":"Analisis Realizado de Reporte 8","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
 #Tendencia de la vacunación de en un País.
@@ -876,7 +942,7 @@ def Reporte10():
     plot.plot(x_new, y_new, color='coral', linewidth=3)
     plot.grid()
     plot.xlim(x_new_min,x_new_max)
-    plot.ylim(0,y_new_max)
+    plot.ylim(0,y_new_max+100)
     title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
     plot.title('Ánalisis Comparativo de Vacunaciópn entre '+pais+'\n' + title, fontsize=10)
     plot.xlabel('Dias')
@@ -902,14 +968,12 @@ def Reporte11():
         "var1":request.json['var1'],
         "var2":request.json['var2'],
         "var3":request.json['var3'],
-        "var10":request.json['var10'],
-        "var11":request.json['var11']
+        "var10":request.json['var10']
     }   
     encabezadoPais = body['var1']
     pais = body['var2']
     encabezadoConfirmados = body['var3']
     encabezadoGenero = body['var10']
-    hombre = body['var11']
     #Dias = int(dias) 
     print(body)
     # data 
@@ -920,17 +984,17 @@ def Reporte11():
     Datos =  dataset.loc[dataset[encabezadoPais]==pais]
     Datos = pd.DataFrame(Datos)
     
-    Todoshombres = Datos.loc[Datos[encabezadoGenero]==hombre]
+    Todoshombres = Datos[encabezadoGenero]
 
-    Todosinfectados = Todoshombres[encabezadoConfirmados]
+    Todosinfectados = Datos[encabezadoConfirmados]
     
     print(Todosinfectados.count())
-    vdias = []
+    vcanthombres = []
     t= 0
     for i in range(Todosinfectados.count()):
-        vdias.append(i)
+        vcanthombres.append(Todoshombres.iloc[i])
     
-    print(vdias)
+    print(vcanthombres)
     Dias = Todosinfectados.count()
     print(Dias)
     vinfectados = []
@@ -954,7 +1018,7 @@ def Reporte11():
     
     '''
     y_new_max = max(vinfectados)
-    x = np.asarray(vdias)[:,np.newaxis]
+    x = np.asarray(vcanthombres)[:,np.newaxis]
     y = np.asarray(vinfectados)[:,np.newaxis]
     plot.scatter(x,y)
     # Transformar a regresion
@@ -974,11 +1038,12 @@ def Reporte11():
     val_rmse = rmse
     val_r2 = r2
 
+    cant = max(vcanthombres)
     # Prediccion desde el dia 0 hasta el dia 50
     x_new_min = 0.0
-    x_new_max = int(Dias)
+    x_new_max = int(cant)
 
-    x_new = np.linspace(x_new_min, x_new_max, int(Dias))
+    x_new = np.linspace(x_new_min, x_new_max, int(cant))
     x_new = x_new[:,np.newaxis]
 
     x_new_transform = polynomial_features.fit_transform(x_new)
@@ -992,7 +1057,7 @@ def Reporte11():
     plot.ylim(0,y_new_max)
     title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
     plot.title('Porcentaje de hombres infectados por covid-19 en un '+pais + ' desde el primer caso activo\n ' + title, fontsize=10)
-    plot.xlabel('Dias')
+    plot.xlabel('Cantidad Hombres')
     plot.ylabel('Infectados')
     plot.legend(('Regresion Poliminomial','Datos'))
 
@@ -1302,8 +1367,8 @@ def Reporte13_2():
     plot.ylim(0,y_new_max)
     title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
     plot.title('Muertes promedio del segmento por  edad de covid 19 en  '+pais+"\n " + title, fontsize=10)
-    plot.xlabel('Dias')
-    plot.ylabel('Confirmados')
+    plot.xlabel('Edad')
+    plot.ylabel('No. Muertes')
 
     plot.legend(('Regresion Poliminomial','Datos'))
     # use savefig() before show().
@@ -1319,7 +1384,8 @@ def Reporte13_2():
 
 
 ''' FIN CONSULTA DE REPORTE 13''' 
-# Muertes según regiones de un país - Covid 19.
+
+# Muertes según regiones de un país - Covid 19.             ---->falta
 @app.route('/Analisis_Reporte14', methods = ['POST']) 
 def Reporte14():
     
@@ -1338,7 +1404,93 @@ def Reporte14():
 #Tendencia de casos confirmados de Coronavirus en un departamento de un País.
 @app.route('/Analisis_Reporte15', methods = ['POST']) 
 def Reporte15():
+    body = {
+        "var1":request.json['var1'],
+        "var2":request.json['var2'],
+        "var5":request.json['var5'],
+        "var6":request.json['var6'],
+        "var7":request.json['var7'],
+        "var4":request.json['var4'],
+        "var3":request.json['var3']
+    }   
+    encabezadoPais = body['var1']   
+    pais = body['var2']
+    encabezadoDepartamento = body['var6']
+    departamento = body['var7']
+    encabezadoConfirmados = body['var3']
+
+    print(body)
+    # data 
     
+    ''' comienza filtro para pais''' 
+    print(encabezadoDepartamento)
+
+    Datos =  dataset.loc[dataset[encabezadoPais]==pais]
+    Datos = pd.DataFrame(Datos)
+
+    print(Datos)
+
+    TodosDepartamento =  Datos.loc[Datos[encabezadoDepartamento]==departamento]
+
+    print(TodosDepartamento)
+    Todosinfectados = TodosDepartamento[encabezadoConfirmados]
+    print(Todosinfectados.count())
+    vdias = []
+
+    for i in range(Todosinfectados.count()):
+        vdias.append(i)
+    
+    #print(vdias)
+    Dias = Todosinfectados.count()
+    print(Dias)
+    vinfectados = []
+    for z in range(Dias):
+        vinfectados.append(Todosinfectados.iloc[z])
+    #print(vinfectados)
+
+    y_new_max = max(vinfectados)
+    x = np.asarray(vdias)[:,np.newaxis]
+    y = np.asarray(vinfectados)[:,np.newaxis]
+    plot.scatter(x,y)
+    # Predecimos la Data
+    poly_degree = 4
+    polynomial_features = PolynomialFeatures(degree = poly_degree)
+    x_transform = polynomial_features.fit_transform(x)
+
+    # Procedemos a entrenar el modelo
+    model = LinearRegression().fit(x_transform, y)
+    # calculamos la varianza ,rmse y r2
+    y_new = model.predict(x_transform)
+    rmse = np.sqrt(mean_squared_error(y, y_new))
+    r2 = r2_score(y, y_new)
+
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+    val_rmse = rmse
+    val_r2 = r2
+
+    # Prediccion desde el dia 0 hasta el dia que solicite
+    x_new_min = 0.0
+    x_new_max = Dias
+
+
+    x_new = np.linspace(x_new_min, x_new_max, Dias)
+    x_new = x_new[:,np.newaxis]
+
+    x_new_transform = polynomial_features.fit_transform(x_new)
+    y_new = model.predict(x_new_transform)
+    # Plot de la grafica
+    #dataset.plot(x='Dias', y='Infectados', style='o')
+    plot.plot(x_new, y_new, color='red', linewidth=3)
+    plot.grid()
+    plot.xlim(x_new_min,x_new_max)
+    plot.ylim(0,y_new_max)
+    title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
+    plot.title('Tendencia de casos confirmados de Coronavirus en covid 19 en '+departamento+' de '+pais+" \n " + title, fontsize=10)
+    plot.xlabel('Dias')
+    plot.ylabel('No. Casos Confirmados')
+
+    plot.legend(('Regresion Poliminomial','Datos'))
     # use savefig() before show().
     plot.savefig("Reporte15.png")
     with open("Reporte15.png", "rb") as img_file:
@@ -1347,11 +1499,11 @@ def Reporte15():
     #plot.show()
     img_file.close()
     plot.close()
-    conclusion = 'Porcentaje de hombres infectados por covid-19 en un ' + ' desde el primer caso activo  con un contador y media como error de : '+' y con un rme de ' 
+    conclusion = 'Tendencia de casos confirmados de Coronavirus en covid 19 '+'en '+departamento+ ' de ' + pais+' desde el primer caso activo  con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)
     #plot.show()
     return jsonify({"message":"Analisis Realizado de Reporte15","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
-#Porcentaje de muertes frente al total de casos en un país, región o continente.
+#Porcentaje de muertes frente al total de casos en un país, región o continente.        --> falta
 @app.route('/Analisis_Reporte16', methods = ['POST']) 
 def Reporte16():
     
@@ -1370,7 +1522,76 @@ def Reporte16():
 #Tasa de comportamiento de casos activos en relación al número de muertes en un continente.
 @app.route('/Analisis_Reporte17', methods = ['POST']) 
 def Reporte17():
+    body = {
+        "var11":request.json['var11'],
+        "var13":request.json['var13'],
+        "var3":request.json['var3'],
+        "var5":request.json['var5']
+    }
+    encabezadoContinente = body['var11']   
+    continente = body['var13']
+    encabezadoCasos = body['var3']
+    encabezadoMuertes = body['var5']
     
+    print(body)
+    # data 
+    
+    ''' comienza filtro para pais''' 
+    print(encabezadoContinente)
+
+    Datos =  dataset.loc[dataset[encabezadoContinente]==continente]
+    Datos = pd.DataFrame(Datos)
+    TodosCasos =  Datos[encabezadoCasos]
+    TodosMuertos = Datos[encabezadoMuertes]
+    print(TodosMuertos.count()) 
+    print(encabezadoMuertes)
+
+    vcasos = []    
+    for i in range(TodosCasos.count()):
+        vcasos.append(TodosCasos.iloc[i])
+    
+    #print(vdias)
+    Dias = TodosMuertos.count()
+    print(Dias)
+    vmuertos = []
+    for z in range(Dias):
+        vmuertos.append(TodosMuertos.iloc[z])
+    #print(vmuertos)
+
+    y_new_max = max(vmuertos)
+    x = np.asarray(vcasos)[:,np.newaxis]
+    y = np.asarray(vmuertos)[:,np.newaxis]
+
+
+    # Procedemos a entrenar el modelo
+    model = LinearRegression().fit(x, y)
+    # calculamos la varianza ,rmse y r2
+    y_new = model.predict(x)
+
+    rmse = np.sqrt(mean_squared_error(y, y_new))
+    r2 = r2_score(y, y_new)
+
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+
+
+    # Prediccion desde el dia 0 hasta el dia que solicite
+    x_new_min = 0.0
+    x_new_max = max(vcasos)
+
+    # Plot de la grafica
+    plot.xlim(x_new_min, x_new_max, max(vcasos))
+    plot.ylim(0,y_new_max)
+
+    plot.grid()
+   
+    title = 'Modelo : Y = {}; X+{}; RMSE = {}; R2 = {}'.format(str(model.coef_[0][0]),str(model.intercept_[0]),round(rmse,2), round(r2,2))
+    plot.title('Tasa de comportamiento de casos activos en relación al número de muertes en '+continente+"\n " + title, fontsize=10)
+    plot.xlabel('No. Casos')
+    plot.ylabel('No. de Muertes')
+    plot.scatter(x, y)
+    plot.plot(x, y_new, color='red')
+    plot.legend(('Regresion Lineal','Datos'))
     # use savefig() before show().
     plot.savefig("Reporte17.png")
     with open("Reporte17.png", "rb") as img_file:
@@ -1379,11 +1600,11 @@ def Reporte17():
     #plot.show()
     img_file.close()
     plot.close()
-    conclusion = 'Porcentaje de hombres infectados por covid-19 en un ' + ' desde el primer caso activo  con un contador y media como error de : '+' y con un rme de ' 
+    conclusion = 'Tasa de comportamiento de casos activos en relación al número de muertes en '+continente + 'Modelo : Y = {}; X+{}; RMSE = {}; R2 = {}'.format(str(model.coef_[0][0]),str(model.intercept_[0]),round(rmse,2), round(r2,2))
     #plot.show()
     return jsonify({"message":"Analisis Realizado de Reporte17","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
-#Comportamiento y clasificación de personas infectadas por COVID-19 por municipio en un País.
+#Comportamiento y clasificación de personas infectadas por COVID-19 por municipio en un País. ----->falta
 @app.route('/Analisis_Reporte18', methods = ['POST']) 
 def Reporte18():
     
@@ -1402,23 +1623,214 @@ def Reporte18():
 # Predicción de muertes en el último día del primer año de infecciones en un país.
 @app.route('/Analisis_Reporte19', methods = ['POST']) 
 def Reporte19():
+    body = {
+        "var1":request.json['var1'],
+        "var2":request.json['var2'],
+        "var5":request.json['var5'],
+        "var14":request.json['var14']
+    }   
+    encabezadoPais = body['var1']
+    pais = body['var2']
+    encabezadoMuertes = body['var5']
+    encabezadofecha = body['var14']
     
+    print(body)
+    # data 
+   
+    ''' comienza filtro para pais''' 
+    print(encabezadoPais)
+
+    Datos =  dataset.loc[dataset[encabezadoPais]==pais]
+    Datos = pd.DataFrame(Datos)
+
+    TodosMuertos = Datos[encabezadoMuertes]
+
+    Mes = Datos[encabezadofecha].dt.month
+    DiaMes = Datos[encabezadofecha].dt.day
+    MesFinal = max(Mes)
+    DiaFinal = max(DiaMes)
+    if MesFinal ==1:
+        DiasPredicion = 365-DiaFinal
+    elif MesFinal ==2:
+        DiasPredicion = 334-DiaFinal
+    elif MesFinal ==3:
+        DiasPredicion = 306-DiaFinal
+    elif MesFinal ==4:
+        DiasPredicion = 275-DiaFinal
+    elif MesFinal ==5:
+        DiasPredicion = 245-DiaFinal
+    elif MesFinal ==6:
+        DiasPredicion = 214-DiaFinal
+    elif MesFinal ==7:
+        DiasPredicion = 184-DiaFinal
+    elif MesFinal ==8:
+        DiasPredicion = 153-DiaFinal
+    elif MesFinal ==9:
+        DiasPredicion = 122-DiaFinal
+    elif MesFinal ==10:
+        DiasPredicion = 92-DiaFinal
+    elif MesFinal ==11:
+        DiasPredicion = 61-DiaFinal
+    elif MesFinal ==12:
+        DiasPredicion = 31-DiaFinal
+    else:
+        DiasPredicion = 365 #int(dias)
+        print('vali verdura')
+
+    print(DiasPredicion)
+
+    print(TodosMuertos.count())
+    vdias = []
+    t= 0
+    for i in range(TodosMuertos.count()):
+        vdias.append(i)
+    
+    print(vdias)
+    Dias = TodosMuertos.count()
+    print(Dias)
+    vinfectados = []
+    for z in range(Dias):
+        vinfectados.append(TodosMuertos.iloc[z])
+    print(vinfectados)
+
+    y_new_max = max(vinfectados)
+    x = np.asarray(vdias)[:,np.newaxis]
+    y = np.asarray(vinfectados)[:,np.newaxis]
+    plot.scatter(x,y)
+    # Predecimos la Data
+    poly_degree = 4
+    polynomial_features = PolynomialFeatures(degree = poly_degree)
+    x_transform = polynomial_features.fit_transform(x)
+
+    # Procedemos a entrenar el modelo
+    model = LinearRegression().fit(x_transform, y)
+    # calculamos la varianza ,rmse y r2
+    y_new = model.predict(x_transform)
+    rmse = np.sqrt(mean_squared_error(y, y_new))
+    r2 = r2_score(y, y_new)
+
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+    val_rmse = rmse
+    val_r2 = r2
+
+    # Prediccion desde el dia 0 hasta el dia que solicite
+    x_new_min = 0.0
+    x_new_max = DiasPredicion+30 # le aumente la prediccion a 30 dias mas 
+
+
+    x_new = np.linspace(x_new_min, x_new_max, Dias)
+    x_new = x_new[:,np.newaxis]
+
+    x_new_transform = polynomial_features.fit_transform(x_new)
+    y_new = model.predict(x_new_transform)
+
+    
+    prediction = y_new[np.size(y_new)-1]
+     # Plot de la grafica
+    #dataset.plot(x='Dias', y='Infectados', style='o')
+    plot.plot(x_new, y_new, color='red', linewidth=3)
+    plot.grid()
+    plot.xlim(x_new_min,x_new_max)
+    plot.ylim(0,y_new_max+100)
+    title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
+    plot.title('Predicción de muertes en el último día del primer año de infecciones en  '+pais+"\n " + title, fontsize=10)
+    plot.xlabel('Dias')
+    plot.ylabel('Muertos')
+
+    plot.legend(('Regresion Poliminomial','Datos'))
     # use savefig() before show().
     plot.savefig("Reporte19.png")
     with open("Reporte19.png", "rb") as img_file:
         my_string =  base64.b64encode(img_file.read())
-    #print(my_string.decode('utf-8'))
-    #plot.show()
     img_file.close()
     plot.close()
-    conclusion = 'Porcentaje de hombres infectados por covid-19 en un ' + ' desde el primer caso activo  con un contador y media como error de : '+' y con un rme de ' 
+    #print(my_string.decode('utf-8'))
     #plot.show()
+    conclusion = 'Predicción de muertes en el último día del primer año de infecciones en '+pais + ' con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)  + ' con una prediccion de 30 dias despues la cual es '+str(prediction)
     return jsonify({"message":"Analisis Realizado de Reporte19","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
 # Tasa de crecimiento de casos de COVID-19 en relación con nuevos casos diarios y tasa de muerte por COVID-19
 @app.route('/Analisis_Reporte20', methods = ['POST']) 
 def Reporte20():
+    body = {
+        "var5":request.json['var5'],
+        "var16":request.json['var16']
+    }
+    encabezadoMuertes = body['var5']   
+    encabezadosNuevosCasos = body['var16']
+
+    print(body)
+    # data 
     
+    ''' comienza filtro ''' 
+    print(encabezadosNuevosCasos)
+
+    Datos =  dataset[encabezadosNuevosCasos]
+    #Datos = pd.DataFrame(Datos)
+
+    TodosResultados = dataset[encabezadoMuertes]
+    print(TodosResultados.count()) 
+    print(encabezadoMuertes)
+
+    vresultEntregados = []    
+    for i in range(TodosResultados.count()):
+        vresultEntregados.append(TodosResultados.iloc[i])
+    
+    #print(vdias)
+    Dias = TodosResultados.count()
+    print(Dias)
+    vconfirmados = []
+    for z in range(Dias):
+        vconfirmados.append(Datos.iloc[z])
+    #print(vmuertos)
+
+    y_new_max = max(vconfirmados)
+    x = np.asarray(vresultEntregados)[:,np.newaxis]
+    y = np.asarray(vconfirmados)[:,np.newaxis]
+
+
+    plot.scatter(x,y)
+    # Predecimos la Data
+    poly_degree = 3
+    polynomial_features = PolynomialFeatures(degree = poly_degree)
+    x_transform = polynomial_features.fit_transform(x)
+
+    # Procedemos a entrenar el modelo
+    model = LinearRegression().fit(x_transform, y)
+    # calculamos la varianza ,rmse y r2
+    y_new = model.predict(x_transform)
+    rmse = np.sqrt(mean_squared_error(y, y_new))
+    r2 = r2_score(y, y_new)
+
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+    val_rmse = rmse
+    val_r2 = r2
+
+    # Prediccion desde el dia 0 hasta el dia que solicite
+    x_new_min = 0.0
+    x_new_max = max(vresultEntregados)
+
+
+    x_new = np.linspace(x_new_min, x_new_max, max(vresultEntregados))
+    x_new = x_new[:,np.newaxis]
+
+    x_new_transform = polynomial_features.fit_transform(x_new)
+    y_new = model.predict(x_new_transform)
+    # Plot de la grafica
+    #dataset.plot(x='Dias', y='Infectados', style='o')
+    plot.plot(x_new, y_new, color='red', linewidth=3)
+    plot.grid()
+    plot.xlim(x_new_min,x_new_max)
+    plot.ylim(0,y_new_max+100)
+    title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
+    plot.title('Tasa de crecimiento de casos de COVID-19 en relación con nuevos casos diarios y tasa \n de muerte por COVID-19'+"\n " + title, fontsize=10)
+    plot.xlabel('No. Muertes')
+    plot.ylabel('No. Nuevos Casos')
+
+    plot.legend(('Regresion Poliminomial','Datos'))
+
     # use savefig() before show().
     plot.savefig("Reporte20.png")
     with open("Reporte20.png", "rb") as img_file:
@@ -1427,14 +1839,94 @@ def Reporte20():
     #plot.show()
     img_file.close()
     plot.close()
-    conclusion = 'Porcentaje de hombres infectados por covid-19 en un ' + ' desde el primer caso activo  con un contador y media como error de : '+' y con un rme de ' 
-    #plot.show()
+    conclusion ='Predicción de casos confirmados por día con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse) 
     return jsonify({"message":"Analisis Realizado de Reporte20","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
+'''INICIO REPORTE 21'''
 # Predicciones de casos y muertes en todo el mundo - Neural Network MLPRegressor
 @app.route('/Analisis_Reporte21', methods = ['POST']) 
 def Reporte21():
+    body = {
+        "var3":request.json['var3'],
+        "var4":request.json['var4'],
+        "var5":request.json['var5']
+    }   
+    encabezadoCasos = body['var3']
+    encabezadoMuertes = body['var5']
+    dias = body['var4']
+    DiasPredicion = int(dias)
+    print(DiasPredicion)
+
+    print(body)
+    # data 
     
+    ''' comienza filtro''' 
+
+    Datos =  dataset[encabezadoCasos]
+    Datos = pd.DataFrame(Datos)
+
+    Todosinfectados = dataset[encabezadoCasos]
+    print(Todosinfectados.count())
+    vdias = []
+
+    for i in range(Todosinfectados.count()):
+        vdias.append(i)
+    
+    print(vdias)
+    Dias = Todosinfectados.count()
+    print(Dias)
+    vinfectados = []
+    for z in range(Dias):
+        vinfectados.append(Todosinfectados.iloc[z])
+    #print(vinfectados)
+
+    y_new_max = max(vinfectados)
+    x = np.asarray(vdias)[:,np.newaxis]
+    y = np.asarray(vinfectados)[:,np.newaxis]
+    plot.scatter(x,y)
+    # Predecimos la Data
+    poly_degree = 3 # duda del grado de la polinomia revisar
+    polynomial_features = PolynomialFeatures(degree = poly_degree)
+    x_transform = polynomial_features.fit_transform(x)
+
+    # Procedemos a entrenar el modelo
+    model = LinearRegression().fit(x_transform, y)
+    # calculamos la varianza ,rmse y r2
+    y_new = model.predict(x_transform)
+    prediction = y_new[np.size(y_new)-1]
+    rmse = np.sqrt(mean_squared_error(y, y_new))
+    r2 = r2_score(y, y_new)
+
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+    val_rmse = rmse
+    val_r2 = r2
+
+     # Prediccion desde el dia 0 hasta el dia que solicite
+    x_new_min = 0.0
+    x_new_max = DiasPredicion # le aumente la prediccion a 30 dias mas 
+
+
+    x_new = np.linspace(x_new_min, x_new_max, Dias)
+    x_new = x_new[:,np.newaxis]
+
+    x_new_transform = polynomial_features.fit_transform(x_new)
+    y_new = model.predict(x_new_transform)
+
+    
+    prediction = y_new[np.size(y_new)-1]
+     # Plot de la grafica
+    #dataset.plot(x='Dias', y='Infectados', style='o')
+    plot.plot(x_new, y_new, color='red', linewidth=3)
+    plot.grid()
+    plot.xlim(x_new_min,x_new_max)
+    plot.ylim(0,y_new_max+100)
+    title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
+    plot.title('Predicciones de casos x dia en todo el mundo \n' + title, fontsize=10)
+    plot.xlabel('Dias')
+    plot.ylabel('No. Casos')
+
+    plot.legend(('Regresion Poliminomial','Datos'))
     # use savefig() before show().
     plot.savefig("Reporte21.png")
     with open("Reporte21.png", "rb") as img_file:
@@ -1443,14 +1935,183 @@ def Reporte21():
     #plot.show()
     img_file.close()
     plot.close()
-    conclusion = 'Porcentaje de hombres infectados por covid-19 en un ' + ' desde el primer caso activo  con un contador y media como error de : '+' y con un rme de ' 
+    conclusion = 'Predicciones de casos x dia en todo el mundo ' + ' con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)  + ' con una prediccion de '+str(DiasPredicion)+' dias despues la cual es '+str(prediction)
     #plot.show()
     return jsonify({"message":"Analisis Realizado de Reporte21","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
+@app.route('/Analisis_Reporte211', methods = ['POST']) 
+def Reporte211():
+    body = {
+        "var3":request.json['var3'],
+        "var4":request.json['var4'],
+        "var5":request.json['var5']
+    }  
+
+    encabezadoCasos = body['var3']
+    encabezadoMuertes = body['var5']
+    dias = body['var4']
+    DiasPredicion = int(dias)
+    print(DiasPredicion)
+
+    print(body)
+    # data 
+    
+    ''' comienza filtro''' 
+
+    Datos =  dataset[encabezadoCasos]
+    Datos = pd.DataFrame(Datos)
+
+    TodosMuertes = dataset[encabezadoMuertes]
+    print(TodosMuertes.count())
+    vdias = []
+
+    for i in range(TodosMuertes.count()):
+        vdias.append(i)
+    
+    print(vdias)
+    Dias = TodosMuertes.count()
+    print(Dias)
+    vinfectados = []
+    for z in range(Dias):
+        vinfectados.append(TodosMuertes.iloc[z])
+    #print(vinfectados)
+
+    y_new_max = max(vinfectados)
+    x = np.asarray(vdias)[:,np.newaxis]
+    y = np.asarray(vinfectados)[:,np.newaxis]
+    plot.scatter(x,y)
+    # Predecimos la Data
+    poly_degree = 3 # duda del grado de la polinomia revisar
+    polynomial_features = PolynomialFeatures(degree = poly_degree)
+    x_transform = polynomial_features.fit_transform(x)
+
+    # Procedemos a entrenar el modelo
+    model = LinearRegression().fit(x_transform, y)
+    # calculamos la varianza ,rmse y r2
+    y_new = model.predict(x_transform)
+    prediction = y_new[np.size(y_new)-1]
+
+    rmse = np.sqrt(mean_squared_error(y, y_new))
+    r2 = r2_score(y, y_new)
+
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+    val_rmse = rmse
+    val_r2 = r2
+
+     # Prediccion desde el dia 0 hasta el dia que solicite
+    x_new_min = 0.0
+    x_new_max = DiasPredicion # le aumente la prediccion a 30 dias mas 
+
+
+    x_new = np.linspace(x_new_min, x_new_max, Dias)
+    x_new = x_new[:,np.newaxis]
+
+    x_new_transform = polynomial_features.fit_transform(x_new)
+    y_new = model.predict(x_new_transform)
+
+    
+    prediction = y_new[np.size(y_new)-1]
+     # Plot de la grafica
+    #dataset.plot(x='Dias', y='Infectados', style='o')
+    plot.plot(x_new, y_new, color='red', linewidth=3)
+    plot.grid()
+    plot.xlim(x_new_min,x_new_max)
+    plot.ylim(0,y_new_max+100)
+    title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
+    plot.title('Predicciones de muertes x Dia en todo el mundo \n' + title, fontsize=10)
+    plot.xlabel('Dias')
+    plot.ylabel('Muertos')
+
+    plot.legend(('Regresion Poliminomial','Datos'))
+    # use savefig() before show().
+    plot.savefig("Reporte211.png")
+    with open("Reporte211.png", "rb") as img_file:
+        my_string =  base64.b64encode(img_file.read())
+    #print(my_string.decode('utf-8'))
+    #plot.show()
+    img_file.close()
+    plot.close()
+    conclusion = 'Predicciones de Muertes x Dia en todo el mundo ' + ' con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)  + ' con una prediccion de '+str(DiasPredicion)+' dias despues la cual es '+str(prediction)
+    #plot.show()
+    return jsonify({"message":"Analisis Realizado de Reporte21","image64":my_string.decode('utf-8'),"conclusion":conclusion})
+
+''' FIN REPORTE 21 '''
 #Tasa de mortalidad por coronavirus (COVID-19) en un país.
 @app.route('/Analisis_Reporte22', methods = ['POST']) 
 def Reporte22():
+    body = {
+        "var1":request.json['var1'],
+        "var2":request.json['var2'],
+        "var3":request.json['var3'],
+        "var5":request.json['var5']
+    }
+    encabezadoPais = body['var1']   
+    pais = body['var2']
+    encabezadoConfirmados = body['var3']
+    encabezadoMuertes = body['var5']
     
+    print(body)
+    # data 
+    
+    ''' comienza filtro para pais''' 
+    print(encabezadoPais)
+
+    Datos =  dataset.loc[dataset[encabezadoPais]==pais]
+    Datos = pd.DataFrame(Datos)
+
+    TodosMuertos = Datos[encabezadoMuertes]
+    print(TodosMuertos.count()) 
+    TodosConfirmados = Datos[encabezadoConfirmados]
+    print(TodosConfirmados.count()) 
+    print(encabezadoMuertes)
+
+    vconfirmados = []    
+    for i in range(TodosConfirmados.count()):
+        vconfirmados.append(TodosConfirmados.iloc[i])
+    
+    #print(vdias)
+    Dias = TodosMuertos.count()
+    print(Dias)
+    vmuertos = []
+    for z in range(Dias):
+        vmuertos.append(TodosMuertos.iloc[z])
+    #print(vmuertos)
+
+    y_new_max = max(vmuertos)
+    x = np.asarray(vconfirmados)[:,np.newaxis]
+    y = np.asarray(vmuertos)[:,np.newaxis]
+
+
+    # Procedemos a entrenar el modelo
+    model = LinearRegression().fit(x, y)
+    # calculamos la varianza ,rmse y r2
+    y_new = model.predict(x)
+
+    rmse = np.sqrt(mean_squared_error(y, y_new))
+    r2 = r2_score(y, y_new)
+
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+
+
+    # Prediccion desde el dia 0 hasta el dia que solicite
+    x_new_min = 0.0
+    x_new_max = max(vconfirmados)
+
+    # Plot de la grafica
+    plot.xlim(x_new_min, x_new_max, max(vconfirmados))
+    plot.ylim(0,y_new_max)
+
+    plot.grid()
+   
+    title = 'Modelo : Y = {}; X+{}; RMSE = {}; R2 = {}'.format(str(model.coef_[0][0]),str(model.intercept_[0]),round(rmse,2), round(r2,2))
+    plot.title('Tasa de mortalidad por coronavirus (COVID-19) en '+pais+"\n " + title, fontsize=10)
+    plot.xlabel('No. Muertes')
+    plot.ylabel('No. Casos Confirmados')
+    plot.scatter(x, y)
+    plot.plot(x, y_new, color='red')
+    plot.legend(('Regresion Lineal','Datos'))
     # use savefig() before show().
     plot.savefig("Reporte22.png")
     with open("Reporte22.png", "rb") as img_file:
@@ -1459,7 +2120,7 @@ def Reporte22():
     #plot.show()
     img_file.close()
     plot.close()
-    conclusion = 'Porcentaje de hombres infectados por covid-19 en un ' + ' desde el primer caso activo  con un contador y media como error de : '+' y con un rme de ' 
+    conclusion = 'Tasa de mortalidad por coronavirus (COVID-19) en '+pais + ' desde el primer caso activo  con un contador y media como error de : '+str(r2)+' y con un rme de '+str(rmse) +'Modelo : Y = {}; X+{}; RMSE = {}; R2 = {}'.format(str(model.coef_[0][0]),str(model.intercept_[0]),round(rmse,2), round(r2,2)) 
     #plot.show()
     return jsonify({"message":"Analisis Realizado de Reporte22","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
@@ -1491,14 +2152,94 @@ def Reporte24():
     #plot.show()
     img_file.close()
     plot.close()
-    conclusion = 'Porcentaje de hombres infectados por covid-19 en un ' + ' desde el primer caso activo  con un contador y media como error de : '+' y con un rme de ' 
+    conclusion = 'Comparación entre el número de casos detectados y el número de pruebas de un país ' + ' desde el primer caso activo  con un contador y media como error de : '+' y con un rme de ' 
     #plot.show()
     return jsonify({"message":"Analisis Realizado de Reporte24","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 
 #Predicción de casos confirmados por día
-@app.route('/Analisis_Reporte24', methods = ['POST']) 
+@app.route('/Analisis_Reporte25', methods = ['POST']) 
 def Reporte25():
+    body = {
+        "var3":request.json['var3'],
+        "var15":request.json['var15'],
+        "var4":request.json['var4']
+    }
+    encabezadoConfirmados = body['var3']   
+    encabezadoResultados = body['var15']
+    dias = body['var4']
+    DiasPredicion = int(dias)
+    print(body)
+    # data 
     
+    ''' comienza filtro ''' 
+    print(encabezadoConfirmados)
+
+    Datos =  dataset[encabezadoConfirmados]
+    #Datos = pd.DataFrame(Datos)
+
+    TodosResultados = dataset[encabezadoResultados]
+    print(TodosResultados.count()) 
+    print(encabezadoResultados)
+
+    vresultEntregados = []    
+    for i in range(TodosResultados.count()):
+        vresultEntregados.append(TodosResultados.iloc[i])
+    
+    #print(vdias)
+    Dias = TodosResultados.count()
+    print(Dias)
+    vconfirmados = []
+    for z in range(Dias):
+        vconfirmados.append(Datos.iloc[z])
+    #print(vmuertos)
+
+    y_new_max = max(vconfirmados)
+    x = np.asarray(vresultEntregados)[:,np.newaxis]
+    y = np.asarray(vconfirmados)[:,np.newaxis]
+
+
+    plot.scatter(x,y)
+    # Predecimos la Data
+    poly_degree = 4
+    polynomial_features = PolynomialFeatures(degree = poly_degree)
+    x_transform = polynomial_features.fit_transform(x)
+
+    # Procedemos a entrenar el modelo
+    model = LinearRegression().fit(x_transform, y)
+    # calculamos la varianza ,rmse y r2
+    y_new = model.predict(x_transform)
+    rmse = np.sqrt(mean_squared_error(y, y_new))
+    r2 = r2_score(y, y_new)
+
+    print('RMSE: ', rmse)
+    print('R2: ', r2)
+    val_rmse = rmse
+    val_r2 = r2
+
+    # Prediccion desde el dia 0 hasta el dia que solicite
+    x_new_min = 0.0
+    x_new_max = DiasPredicion
+
+
+    x_new = np.linspace(x_new_min, x_new_max, Dias)
+    x_new = x_new[:,np.newaxis]
+
+    x_new_transform = polynomial_features.fit_transform(x_new)
+    y_new = model.predict(x_new_transform)
+    prediction = y_new[np.size(y_new)-1]
+    # Plot de la grafica
+    #dataset.plot(x='Dias', y='Infectados', style='o')
+    plot.plot(x_new, y_new, color='red', linewidth=3)
+    plot.grid()
+    plot.xlim(x_new_min,x_new_max)
+    plot.ylim(0,y_new_max+100)
+    title = 'Degree = {}; RMSE = {}; R2 = {}'.format(poly_degree, round(rmse,2), round(r2,2))
+    plot.title('Predicción de casos confirmados por día'+"\n " + title, fontsize=10)
+    plot.xlabel('No. Resultados Entregados')
+    plot.ylabel('No. Casos Confirmados')
+
+    plot.legend(('Regresion Poliminomial','Datos'))
+
     # use savefig() before show().
     plot.savefig("Reporte25.png")
     with open("Reporte25.png", "rb") as img_file:
@@ -1507,7 +2248,7 @@ def Reporte25():
     #plot.show()
     img_file.close()
     plot.close()
-    conclusion = 'Porcentaje de hombres infectados por covid-19 en un ' + ' desde el primer caso activo  con un contador y media como error de : '+' y con un rme de ' 
+    conclusion ='Predicción de casos confirmados por día con un contador y media como error de : ' + str(val_r2) +' y con un rme de ' + str(val_rmse)  + ' con una prediccion de '+str(DiasPredicion)+' dias despues la cual es '+str(prediction)
     #plot.show()
     return jsonify({"message":"Analisis Realizado de Reporte25","image64":my_string.decode('utf-8'),"conclusion":conclusion})
 

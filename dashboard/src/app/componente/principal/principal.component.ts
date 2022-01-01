@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Reporte1 } from '../../models/Report';
@@ -11,6 +12,8 @@ export class PrincipalComponent implements OnInit {
   // para selecion de tipo
   categoriaSeleccionado: string = null;
   verSeleccionCategoria: string = null;
+  isComparation: boolean = false;
+  isComparation1: boolean = false;
   Reporte: Reporte1 = {
     var1: '',
     var2: '',
@@ -20,9 +23,18 @@ export class PrincipalComponent implements OnInit {
     var6: '',
     var7: '',
     var8: '',
-    Datos: '', 
+    var9: '',
+    var10: '',
+    var11: '',
+    var12: '',
+    Datos: '',
+    grupo: '', 
     image64: '',
+    image64_1: '',
+    image64_2: '',
     conclusion:'vamo a ganar',
+    conclusion1:'1',
+    conclusion2:'2',
     report1x: [],
     report1y: []
   };
@@ -188,34 +200,218 @@ export class PrincipalComponent implements OnInit {
           );
           break;
         case "6":
-        
+          console.log(this.Reporte);
+
+          this.analisisService.AnalisisReporte6(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion =  res.conclusion;
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "7":
-        
+          console.log(this.Reporte);
+
+          this.analisisService.AnalisisReporte7(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion =  res.conclusion;
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "8":
-        
+          console.log(this.Reporte);
+
+          this.analisisService.AnalisisReporte8(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion =  res.conclusion;
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "9":
-        
+          console.log(this.Reporte);
+
+          this.analisisService.AnalisisReporte9(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion =  res.conclusion;
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "10":
-        
+          console.log(this.Reporte);
+          this.analisisService.AnalisisReporte10(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion = 'Conclusion del '+ this.Reporte.var2+' ';
+              this.Reporte.conclusion +=  res.conclusion;
+              this.Reporte.var2 = this.Reporte.var8;
+              this.analisisService.AnalisisReporte10(this.Reporte).subscribe(
+                (res) => {
+                  console.log(res);
+                  this.Reporte.image64_2 = 'data:image/png;base64,';
+                  this.Reporte.image64_2 += res.image64;
+                  this.Reporte.conclusion2 = 'Conclusion de '+ this.Reporte.var8 + ' ';
+                  this.Reporte.conclusion2 +=  res.conclusion;
+                },
+                (err) => {
+                  console.log(err)
+                  alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+                 
+                }
+              );
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "11":
-        
+          console.log(this.Reporte);
+
+          this.analisisService.AnalisisReporte11(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion =  res.conclusion;
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "12":
-        
+          console.log(this.Reporte);
+
+          this.analisisService.AnalisisReporte12(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion =  res.conclusion;
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "13":
-        
+          console.log(this.Reporte);         
+          this.Reporte.grupo  =  '50';           
+          this.analisisService.AnalisisReporte13(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion = 'Conclusion de Muertes y Confirmados \n';
+              this.Reporte.conclusion +=  res.conclusion;
+              this.analisisService.AnalisisReporte13_1(this.Reporte).subscribe(
+                (res) => {
+                  console.log(res);
+                  this.Reporte.image64_1 = 'data:image/png;base64,';
+                  this.Reporte.image64_1 += res.image64;
+                  this.Reporte.conclusion1 = 'Conclusion de Confirmados por edad \n';
+                  this.Reporte.conclusion1 +=  res.conclusion;
+                  this.analisisService.AnalisisReporte13_2(this.Reporte).subscribe(
+                    (res) => {
+                      console.log(res);
+                      this.Reporte.image64_2 = 'data:image/png;base64,';
+                      this.Reporte.image64_2 += res.image64;
+                      this.Reporte.conclusion2 = 'Conclusion de Muertes por edad \n';
+                      this.Reporte.conclusion2 +=  res.conclusion;
+                    },
+                    (err) => {
+                      console.log(err)
+                      alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+                     
+                    }
+                  );
+                },
+                (err) => {
+                  console.log(err)
+                  alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+                 
+                }
+              );
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "14":
-        
+          console.log(this.Reporte);
+
+          this.analisisService.AnalisisReporte14(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion =  res.conclusion;
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "15":
-        
+          console.log(this.Reporte);
+
+          this.analisisService.AnalisisReporte15(this.Reporte).subscribe(
+            (res) => {
+              console.log(res);
+              this.Reporte.image64 = 'data:image/png;base64,';
+              this.Reporte.image64 += res.image64;
+              this.Reporte.conclusion =  res.conclusion;
+            },
+            (err) => {
+              console.log(err)
+              alert("hubo un error al generar el analisis revise bien la parametrizacion de variables")
+             
+            }
+          );
           break;
         case "16":
         
@@ -265,6 +461,18 @@ export class PrincipalComponent implements OnInit {
   capturarCategorias() {  
     this.verSeleccionCategoria = this.categoriaSeleccionado;
     console.log(this.verSeleccionCategoria);
+    if(this.verSeleccionCategoria==="10"){
+      this.isComparation = true;
+    }else{
+      this.isComparation = false;
+    }
+    if(this.verSeleccionCategoria==="13" ){
+      this.isComparation1 = true;
+      this.isComparation = true;
+    }else{
+      this.isComparation = false;
+      this.isComparation1 = false;
+    }
     /*if(this.verSeleccionCategoria == "Todas Categorias"){
       this.isLoggedProveedor = false;
       this.isLoggedCliente = false;

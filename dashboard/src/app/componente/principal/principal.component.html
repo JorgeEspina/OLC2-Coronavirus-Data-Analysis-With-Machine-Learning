@@ -301,55 +301,70 @@
                         <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                             <div class="card-body">
                                 <form role="form text-left">
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport||isReport1||isReport4||isReport5||isReport6||isReport7||isReport8||isReport9||isReport10||isReport12||isReport14||isReport17||isReport18||isReport21||isReport22||isReport23">
                                     <input type="text" class="form-control" [(ngModel)]="Reporte.var1"  placeholder="Enzabezado de Pais " name="var1" aria-label="Variable 1" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport||isReport1||isReport4||isReport5||isReport6||isReport7||isReport8||isReport9||isReport10||isReport12||isReport14||isReport17||isReport18||isReport21||isReport22||isReport23">
                                         <input type="text" class="form-control" [(ngModel)]="Reporte.var2" placeholder="Nombre de Pais " name="var2" aria-label="Variable 2" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport9">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var8" placeholder="Nombre de Pais 2 " name="var8" aria-label="Variable 8" >                                    
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport||isReport1||isReport2||isReport6||isReport7||isReport10||isReport12||isReport14||isReport16||isReport17||isReport20||isReport21||isReport23||isReport24">
                                         <input type="text" class="form-control" [(ngModel)]="Reporte.var3" placeholder="Enzabezados de Infectados/Casos " name="var3" aria-label="Variable 3" >                                    
                                     </div>
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control" [(ngModel)]="Reporte.var4" placeholder="No. Dias Prediccion " name="var4" aria-label="Variable 4" >
+                                    <div class="mb-3" *ngIf="isReport1||isReport3||isReport4||isReport6||isReport20||isReport24">
+                                        <input type="text" class="form-control" [(ngModel)]="Reporte.var4" placeholder="No. Dias  " name="var4" aria-label="Variable 4" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport3||isReport4||isReport5||isReport12||isReport14||isReport16||isReport18||isReport19||isReport20||isReport21">
                                         <input type="text" class="form-control" [(ngModel)]="Reporte.var5" placeholder="Encabezado de Muertes " name="var5" aria-label="Variable 5" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport3||isReport14">
                                         <input type="text" class="form-control" [(ngModel)]="Reporte.var6" placeholder="Encabezado de Departamento " name="var6" aria-label="Variable 6" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport3||isReport14">
                                         <input type="text" class="form-control" [(ngModel)]="Reporte.var7" placeholder="Nombre de Departamento" name="var7" aria-label="Variable 7" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport8||isReport9">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var9" placeholder="Encabezado de Vacunacion " name="var9" aria-label="Variable 9" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport10||isReport17">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var10" placeholder="Encabezado de Genero/Hombre/Mujer " name="var10" aria-label="Variable 10" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport16">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var11" placeholder="Encabezado de Continente" name="var11" aria-label="Variable 11" >
                                     </div>
-                                    <div class="mb-3">
-                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var13" placeholder="Nombre de Continente" name="var13" aria-label="Variable 11" >
+                                    <div class="mb-3" *ngIf="isReport16">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var13" placeholder="Nombre de Continente" name="var13" aria-label="Variable 13" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport12">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var12" placeholder="Encabezado de Edad" name="var12" aria-label="Variable 12" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport18">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var14" placeholder="Encabezado de Fecha" name="var14" aria-label="Variable 14" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport24">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var15" placeholder="Encabezado de Resultados Entregados" name="var15" aria-label="Variable 15" >
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" *ngIf="isReport19">
                                       <input type="text" class="form-control" [(ngModel)]="Reporte.var16" placeholder="Encabezado de Nuevos Casos" name="var16" aria-label="Variable 16" >
                                     </div>
-                                   
+                                    <div class="mb-3" *ngIf="isReport23">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var17" placeholder="Encabezado de Pruebas" name="var17" aria-label="Variable 17" >
+                                    </div>
+                                    <div class="mb-3" *ngIf="isReport22">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var18" placeholder="Factor x Muerte" name="var18" aria-label="Variable 18" >
+                                    </div>
+                                    <div class="mb-3" *ngIf="isReport17">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var19" placeholder="Encabezado 2do. Genero/Hombre/Mujer" name="var19" aria-label="Variable 19" >
+                                    </div>
+                                    <div class="mb-3" *ngIf="isReport17">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var20" placeholder="Encabezado Municipio" name="var20" aria-label="Variable 20" >
+                                    </div>
+                                    <div class="mb-3" *ngIf="isReport17">
+                                      <input type="text" class="form-control" [(ngModel)]="Reporte.var21" placeholder="Nombre Municipio" name="var21" aria-label="Variable 21" >
+                                    </div>
+                                    
                                     <div class="text-center">
                                         <div class="d-flex align-items-center justify-content-between">
                                             <button type="button" class="btn btn-outline-primary btn-sm mb-0" (click)="Analisis()">Analisis de Reporte</button>                    
@@ -375,6 +390,8 @@
   <script src="../../../assets/js/core/bootstrap.min.js"></script>
   <script src="../../../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../../../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="../../../assets/jsPDF/libs/jspdf.umd.js"></script>
+  <script src="../../../assets/jsPDF/jspdf.plugin.autotable.js"></script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {

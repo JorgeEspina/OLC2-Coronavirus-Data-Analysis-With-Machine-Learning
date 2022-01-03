@@ -76,6 +76,9 @@ export class AnalisisService {
   AnalisisReporte18(reporte18:Reporte1): Observable<Reporte1> {
     return this.http.post('http://127.0.0.1:5000/Analisis_Reporte18',reporte18);
   }
+  AnalisisReporte181(reporte18:Reporte1): Observable<Reporte1> {
+    return this.http.post('http://127.0.0.1:5000/Analisis_Reporte181',reporte18);
+  }
   AnalisisReporte19(reporte19:Reporte1): Observable<Reporte1> {
     return this.http.post('http://127.0.0.1:5000/Analisis_Reporte19',reporte19);
   }
@@ -96,6 +99,9 @@ export class AnalisisService {
   }
   AnalisisReporte24(reporte24:Reporte1): Observable<Reporte1> {
     return this.http.post('http://127.0.0.1:5000/Analisis_Reporte24',reporte24);
+  }
+  AnalisisReporte241(reporte24:Reporte1): Observable<Reporte1> {
+    return this.http.post('http://127.0.0.1:5000/Analisis_Reporte241',reporte24);
   }
   AnalisisReporte25(reporte25:Reporte1): Observable<Reporte1> {
     return this.http.post('http://127.0.0.1:5000/Analisis_Reporte25',reporte25);

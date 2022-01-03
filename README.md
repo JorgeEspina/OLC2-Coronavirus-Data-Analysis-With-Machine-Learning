@@ -29,7 +29,7 @@ _Todos los datos recopilados y mostrados han sido extraídos de las bases de dat
   <li>Documentacion:
     <ul>
        <li><a href="https://github.com/JorgeEspina/OLC2-Coronavirus-Data-Analysis-With-Machine-Learning/blob/main/Documentacion/ManualUsuario.md" target="_blank">:point_right:Manual de Usuario</a></li>
-       <li><a href="https://github.com/JorgeEspina/OLC2-Coronavirus-Data-Analysis-With-Machine-Learning/blob/mmain/Documentacion/ManualTecnico.md">:point_right:Manual de Tecnico</a></li>
+       <li><a href="https://github.com/JorgeEspina/OLC2-Coronavirus-Data-Analysis-With-Machine-Learning/blob/main/Documentacion/ManualTecnico.md">:point_right:Manual de Tecnico</a></li>
     </ul>
   </li>
 </ul>

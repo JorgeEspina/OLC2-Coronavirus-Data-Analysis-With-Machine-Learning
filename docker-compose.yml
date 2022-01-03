@@ -1,0 +1,15 @@
+version: '3'
+services:
+
+  frontend:
+    container_name: FdFrontend
+    image: nginx
+    build:
+      context: ./dashboard/
+      dockerfile: .docker/nginx.dockerfile
+    volumes:
+      - ./dashboard/dist/dashboard:/usr/share/nginx/html
+    ports:
+      - "80:80"
+
+

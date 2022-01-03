@@ -32,12 +32,13 @@ def Carga():
     ext = os.path.splitext(Nombre) 
     
     if ext[1]=='.csv':
-        dataset = pd.read_csv(Datos,encoding='latin-1')
-        #tipo = 1
-    elif ext[1] == '.xlsx':
-        dataset = pd.read_excel(Datos)
+        dataset = pd.read_csv(Datos,encoding='latin-1')  
     elif ext[1] == '.json':
         dataset = pd.read_json(Datos)
+    elif ext[1] == '.xlsx':
+        dataset = pd.read_excel(Datos)
+    else:
+        dataset = pd.read_excel(Datos)
 
     #df2 = dataset[dataset['Country/Region'] == 'Guatemala']
     print(dataset)

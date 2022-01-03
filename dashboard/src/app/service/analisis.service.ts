@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Reporte1 } from '../models/Report';
+import { getUrl } from '../../assets/env';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnalisisService {
-
+  
   constructor(private http: HttpClient) {}
 
   // Subir para analisis 

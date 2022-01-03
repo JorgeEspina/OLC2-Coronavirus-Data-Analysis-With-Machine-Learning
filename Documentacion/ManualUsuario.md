@@ -25,6 +25,8 @@ _
 - Docker: automatiza el despliegue de aplicaciones dentro de contenedores de software
 - Docker-Componse: es una herramienta para definir y ejecutar aplicaciones Docker de varios contenedores. Con Compose, usa un archivo YAML para configurar los servicios de su aplicación.
 - ngnix: es un servidor web/proxy inverso ligero de alto rendimiento y un proxy para protocolos de correo electrónico.
+- Python: Se trata de un lenguaje de programación multiparadigma, ya que soporta parcialmente la orientación a objetos, programación imperativa y, en menor medida, programación funcional.
+- Flask: Es un framework minimalista escrito en Python que permite crear aplicaciones web rápidamente y con un mínimo número de líneas de código.
   
 
 
@@ -42,5 +44,5 @@ _
 - 6 . Selecciona el campo y se desglosara los reportes que podra analizar.
 - 7 . Se le habilitaran los campos necesarios al seleccionar el reporte.
 - 8 . Despues de haber llenado todos los campos podra darle analizar para poder sacar los resultados.
-### 📋 Reporte - Muestra
+### 📋 Reporte
 ![This is a alt text.](../Documentacion/img/3.PNG "Pagina Web- Funcionamiento.")

@@ -6,6 +6,8 @@
 | --------------------------- | --------- |
 | JORGE DAVID ESPINA MOLINA   | 201403632 |
 
+![This is a alt text.](Documentacion/img/0.PNG "Pagina Web- Funcionamiento.")
+
 
 ## Descripción 
 
@@ -26,8 +28,9 @@ _Todos los datos recopilados y mostrados han sido extraídos de las bases de dat
 <ul>
   <li>Documentacion:
     <ul>
-       <li><a href="https://github.com/JorgeEspina/OLC2-Coronavirus-Data-Analysis-With-Machine-Learning/blob/master/Documentacion/ManualUsuario.md" target="_blank">:point_right:Manual de Usuario</a></li>
-       <li><a href="https://github.com/JorgeEspina/OLC2-Coronavirus-Data-Analysis-With-Machine-Learning/blob/master/Documentacion/ManualTecnico.md">:point_right:Manual de Tecnico</a></li>
+       <li><a href="https://github.com/JorgeEspina/OLC2-Coronavirus-Data-Analysis-With-Machine-Learning/blob/main/Documentacion/ManualUsuario.md" target="_blank">:point_right:Manual de Usuario</a></li>
+       <li><a href="https://github.com/JorgeEspina/OLC2-Coronavirus-Data-Analysis-With-Machine-Learning/blob/mmain/Documentacion/ManualTecnico.md">:point_right:Manual de Tecnico</a></li>
     </ul>
   </li>
 </ul>
+

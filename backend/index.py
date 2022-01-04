@@ -1210,7 +1210,7 @@ def Reporte13():
     TodasMuertes = TodasMuertes.replace(np.nan,0)
 
     print(Todosinfectados.count())
-    #print(TodasMuertes)
+    print(TodasMuertes)
     vmuerte = []
 
     for i in range(TodasMuertes.count()):

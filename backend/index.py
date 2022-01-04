@@ -1119,9 +1119,9 @@ def Reporte11():
     cant = max(vcanthombres)
     # Prediccion desde el dia 0 hasta el dia 50
     x_new_min = 0.0
-    x_new_max = int(cant)
+    x_new_max = int(cant)+25
 
-    x_new = np.linspace(x_new_min, x_new_max, int(cant))
+    x_new = np.linspace(x_new_min, x_new_max, int(cant)+25)
     x_new = x_new[:,np.newaxis]
 
     x_new_transform = polynomial_features.fit_transform(x_new)

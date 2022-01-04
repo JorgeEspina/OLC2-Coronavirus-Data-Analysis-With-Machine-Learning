@@ -185,6 +185,7 @@ def Reporte2():
     Datos = pd.DataFrame(Datos)
 
     Todosinfectados = Datos[encabezadoConfirmados]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
     print(Todosinfectados.count())
     vdias = []
     t= 0
@@ -276,7 +277,7 @@ def Reporte3():
 
     Datos =  dataset[encabezadoConfirmados]
     #Datos = pd.DataFrame(Datos)
-
+    Datos = Datos.replace(np.nan,0)
     print(Datos.count()) 
 
     vdias = []    
@@ -368,6 +369,7 @@ def Reporte4():
     Datos = pd.DataFrame(Datos)
 
     Todosinfectados = Datos[encabezadoMuertes]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
     print(Todosinfectados.count())
     vdias = []
     for i in range(Todosinfectados.count()):
@@ -467,6 +469,7 @@ def Reporte5():
     Datos = pd.DataFrame(Datos)
 
     Todosinfectados = Datos[encabezadoMuertes]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
     print(Todosinfectados.count())
     vdias = []
     t= 0
@@ -562,6 +565,8 @@ def Reporte6():
     Datos = pd.DataFrame(Datos)
 
     TodosMuertos = Datos[encabezadoMuertes]
+    TodosMuertos = TodosMuertos.replace(np.nan,0)
+
     print(TodosMuertos.count()) 
     print(encabezadoMuertes)
 
@@ -657,6 +662,8 @@ def Reporte7():
     Datos = pd.DataFrame(Datos)
 
     Todosinfectados = Datos[encabezadoConfirmados]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
+
     vinfectados = []
     for z in range(Dias):
         vinfectados.append(Todosinfectados.iloc[z])
@@ -758,6 +765,8 @@ def Reporte8():
     Datos = pd.DataFrame(Datos)
 
     Todosinfectados = Datos[encabezadoConfirmados]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
+
     vdias = []
     Dias = Todosinfectados.count()
     for i in range(Dias):
@@ -855,7 +864,7 @@ def Reporte9():
     
 
     Todosinfectados = Datos[encabezadoVacunados]
-
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
     print(Todosinfectados.count())
     vdias = []
     t= 0
@@ -953,7 +962,7 @@ def Reporte10():
     
 
     Todosinfectados = Datos[encabezadoVacunados]
-
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
     print(Todosinfectados.count())
     vdias = []
     t= 0
@@ -1053,9 +1062,10 @@ def Reporte11():
     Datos = pd.DataFrame(Datos)
     
     Todoshombres = Datos[encabezadoGenero]
+    Todoshombres = Todoshombres.replace(np.nan,0)
 
     Todosinfectados = Datos[encabezadoConfirmados]
-    
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
     print(Todosinfectados.count())
     vcanthombres = []
     t= 0
@@ -1191,9 +1201,14 @@ def Reporte13():
     Datos = pd.DataFrame(Datos)
 
     TodasEdades = Datos[encabezadoEdad]
-    
+    TodasEdades = TodasEdades.replace(np.nan,0)
+
     Todosinfectados = Datos[encabezadoConfirmados]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
+    
     TodasMuertes = Datos[encabezadoMuerte]
+    TodasMuertes = TodasMuertes.replace(np.nan,0)
+
     print(Todosinfectados.count())
     #print(TodasMuertes)
     vmuerte = []
@@ -1296,9 +1311,16 @@ def Reporte13_1():
     Datos = pd.DataFrame(Datos)
 
     TodasEdades = Datos[encabezadoEdad]
-    print(TodasEdades)
-    TodosMuertes = Datos[encabezadoMuerte]
+    TodasEdades = TodasEdades.replace(np.nan,0)
+
     Todosinfectados = Datos[encabezadoConfirmados]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
+    
+    TodasMuertes = Datos[encabezadoMuerte]
+    TodasMuertes = TodasMuertes.replace(np.nan,0)
+    
+    print(TodasEdades)
+    
     print(Todosinfectados.count())
     vedades = []
 
@@ -1397,9 +1419,14 @@ def Reporte13_2():
     Datos = pd.DataFrame(Datos)
 
     TodasEdades = Datos[encabezadoEdad]
+    TodasEdades = TodasEdades.replace(np.nan,0)
     print(TodasEdades)
-    TodosMuertes = Datos[encabezadoMuerte]
+
     Todosinfectados = Datos[encabezadoConfirmados]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
+    
+    TodosMuertes = Datos[encabezadoMuerte]
+    TodosMuertes = TodosMuertes.replace(np.nan,0)
     print(TodosMuertes.count())
     vedades = []
 
@@ -1526,9 +1553,11 @@ def Reporte15():
     print(Datos)
 
     TodosDepartamento =  Datos.loc[Datos[encabezadoDepartamento]==departamento]
-
+    
     print(TodosDepartamento)
     Todosinfectados = TodosDepartamento[encabezadoConfirmados]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
+
     print(Todosinfectados.count())
     vdias = []
 
@@ -1644,7 +1673,9 @@ def Reporte17():
     Datos =  dataset.loc[dataset[encabezadoContinente]==continente]
     Datos = pd.DataFrame(Datos)
     TodosCasos =  Datos[encabezadoCasos]
+    TodosCasos = TodosCasos.replace(np.nan,0)
     TodosMuertos = Datos[encabezadoMuertes]
+    TodosMuertos = TodosMuertos.replace(np.nan,0)
     print(TodosMuertos.count()) 
     print(encabezadoMuertes)
 
@@ -1745,8 +1776,10 @@ def Reporte18():
     TodosMunicipio =  Datos.loc[Datos[encabezadoMunicipio]==municipio]
     print(TodosMunicipio)
     TodosGenero = TodosMunicipio[encabezadoGenero]
+    TodosGenero = TodosGenero.replace(np.nan,0)
     print(TodosGenero)
     Todosinfectados = TodosMunicipio[encabezadoGenero2]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
     print(Todosinfectados.count())
     vdias = []    
     for i in range(2):
@@ -1843,11 +1876,13 @@ def Reporte181():
     Datos = pd.DataFrame(Datos)
 
     print(Datos)
-
+    
     TodosMunicipio =  Datos.loc[Datos[encabezadoMunicipio]==municipio]
     TodosGenero = TodosMunicipio[encabezadoGenero2]
+    TodosGenero = TodosGenero.replace(np.nan,0)
     print(TodosGenero)
     Todosinfectados = TodosMunicipio[encabezadoConfirmados]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
     print("infectados que hay abajo")
     print(Todosinfectados.count())
     vdias = []
@@ -1944,9 +1979,11 @@ def Reporte19():
     Datos = pd.DataFrame(Datos)
 
     TodosMuertos = Datos[encabezadoMuertes]
-
+    TodosMuertos = TodosMuertos.replace(np.nan,0)
     Mes = Datos[encabezadofecha].dt.month
+    Mes = Mes.replace(np.nan,0)
     DiaMes = Datos[encabezadofecha].dt.day
+    DiaMes = DiaMes.replace(np.nan,0)
     MesFinal = max(Mes)
     DiaFinal = max(DiaMes)
     if MesFinal ==1:
@@ -2073,9 +2110,12 @@ def Reporte20():
     print(encabezadosNuevosCasos)
 
     Datos =  dataset[encabezadosNuevosCasos]
+    Datos = Datos.replace(np.nan,0)
     #Datos = pd.DataFrame(Datos)
 
     TodosResultados = dataset[encabezadoMuertes]
+    TodosResultados = TodosResultados.replace(np.nan,0)
+
     print(TodosResultados.count()) 
     print(encabezadoMuertes)
 
@@ -2177,8 +2217,10 @@ def Reporte21():
 
     Datos =  dataset[encabezadoCasos]
     Datos = pd.DataFrame(Datos)
+    Datos = Datos.replace(np.nan,0)
 
     Todosinfectados = dataset[encabezadoCasos]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
     print(Todosinfectados.count())
     vdias = []
 
@@ -2278,8 +2320,10 @@ def Reporte211():
 
     Datos =  dataset[encabezadoCasos]
     Datos = pd.DataFrame(Datos)
+    Datos = Datos.replace(np.nan,0)
 
     TodosMuertes = dataset[encabezadoMuertes]
+    TodosMuertes = TodosMuertes.replace(np.nan,0)
     print(TodosMuertes.count())
     vdias = []
 
@@ -2384,8 +2428,10 @@ def Reporte22():
     Datos = pd.DataFrame(Datos)
 
     TodosMuertos = Datos[encabezadoMuertes]
+    TodosMuertos = TodosMuertos.replace(np.nan,0)
     print(TodosMuertos.count()) 
     TodosConfirmados = Datos[encabezadoConfirmados]
+    TodosConfirmados = TodosConfirmados.replace(np.nan,0)
     print(TodosConfirmados.count()) 
     print(encabezadoMuertes)
 
@@ -2474,7 +2520,7 @@ def Reporte23():
     Datos = pd.DataFrame(Datos)
     
     TodosxFactor = Datos[encabezadoxFactor]
-
+    TodosxFactor = TodosxFactor.replace(np.nan,0)
     #print(TodosxFactor.count())
     vdias = []
     t= 0
@@ -2564,8 +2610,10 @@ def Reporte24():
 
     TodosCasos =  Datos[encabezadosCasos]
     #Datos = pd.DataFrame(Datos)
+    TodosCasos = TodosCasos.replace(np.nan,0)
 
     TodosResultados = Datos[encabezadoPruebas]
+    TodosResultados = TodosResultados.replace(np.nan,0)
     print(TodosResultados.count()) 
     print(encabezadoPruebas)
 
@@ -2667,9 +2715,12 @@ def Reporte241():
     Datos = pd.DataFrame(Datos)
 
     TodosCasos =  Datos[encabezadosCasos]
+    TodosCasos = TodosCasos.replace(np.nan,0)
     #Datos = pd.DataFrame(Datos)
 
     TodosResultados = Datos[encabezadoPruebas]
+    TodosResultados = TodosResultados.replace(np.nan,0)
+
     print(TodosResultados.count()) 
     print(encabezadoPruebas)
 
@@ -2771,8 +2822,10 @@ def Reporte25():
 
     Datos =  dataset[encabezadoConfirmados]
     #Datos = pd.DataFrame(Datos)
+    Datos = Datos.replace(np.nan,0)
 
     TodosResultados = dataset[encabezadoResultados]
+    TodosResultados = TodosResultados.replace(np.nan,0)
     print(TodosResultados.count()) 
     print(encabezadoResultados)
 

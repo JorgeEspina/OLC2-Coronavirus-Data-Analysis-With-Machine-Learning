@@ -36,6 +36,7 @@ _
 
 
 ### 📋 Detalle del Flujo de Quetzal
+![This is a alt text.](../Documentacion/img/4.PNG "Pagina Web- Funcionamiento.")
 - 1 . Seleccionar un archivo este botón nos abrirá un navegador de windows en el cual podemos buscar el archivo de entrada que deseamos cargar.
 - 2 . Descarga el Reporte elegido en formato pdf.
 - 3 . Genera la Grafica despues de hacer el analisis.
@@ -46,3 +47,5 @@ _
 - 8 . Despues de haber llenado todos los campos podra darle analizar para poder sacar los resultados.
 ### 📋 Reporte
 ![This is a alt text.](../Documentacion/img/3.PNG "Pagina Web- Funcionamiento.")
+
+

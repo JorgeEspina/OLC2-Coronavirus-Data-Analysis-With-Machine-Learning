@@ -2157,10 +2157,10 @@ def Reporte20():
 
     # Prediccion desde el dia 0 hasta el dia que solicite
     x_new_min = 0.0
-    x_new_max = max(vresultEntregados)
+    x_new_max = int(max(vresultEntregados))
 
 
-    x_new = np.linspace(x_new_min, x_new_max, max(vresultEntregados))
+    x_new = np.linspace(x_new_min, x_new_max,int(max(vresultEntregados)))
     x_new = x_new[:,np.newaxis]
 
     x_new_transform = polynomial_features.fit_transform(x_new)

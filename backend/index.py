@@ -1828,7 +1828,7 @@ def Reporte18():
     plot.xlabel('Genero[pto. izq-->Hombres pto. der--> Mujeres ]')
     plot.ylabel('No. Casos Confirmados')
     plot.scatter(x+1, y)
-    plot.plot(x+1, y_new+10,color='red')
+    plot.plot(x+1, y_new,color='red')
     plot.legend(('Generos','Datos'))
 
 

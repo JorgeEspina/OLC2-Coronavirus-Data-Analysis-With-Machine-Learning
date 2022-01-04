@@ -67,6 +67,8 @@ def Reporte1():
     
 
     Todosinfectados = Datos[encabezadoConfirmados]
+    Todosinfectados = Todosinfectados.replace(np.nan,0)
+
 
     print(Todosinfectados.count())
     vdias = []
@@ -97,7 +99,6 @@ def Reporte1():
     print(vinfectados)
     
     '''
-    vinfectados = vinfectados.replace(np.nan,0)
     y_new_max = max(vinfectados)
     x = np.asarray(vdias)[:,np.newaxis]
     y = np.asarray(vinfectados)[:,np.newaxis]

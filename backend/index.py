@@ -35,6 +35,7 @@ def Carga():
         dataset = pd.read_csv(Datos,encoding='latin-1')  
     elif ext[1] == '.json':
         dataset = pd.read_json(Datos)
+        dataset = dataset.replace("",0)
     elif ext[1] == '.xlsx':
         dataset = pd.read_excel(Datos)
     else:

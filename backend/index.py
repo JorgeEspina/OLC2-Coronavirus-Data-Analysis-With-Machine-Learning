@@ -1980,7 +1980,7 @@ def Reporte19():
 
     TodosMuertos = Datos[encabezadoMuertes]
     TodosMuertos = TodosMuertos.replace(np.nan,0)
-    Mes = Datos[encabezadofecha].dt.month
+    '''Mes = Datos[encabezadofecha].dt.month
     Mes = Mes.replace(np.nan,0)
     DiaMes = Datos[encabezadofecha].dt.day
     DiaMes = DiaMes.replace(np.nan,0)
@@ -2013,7 +2013,8 @@ def Reporte19():
     else:
         DiasPredicion = 365 #int(dias)
         print('vali verdura')
-
+    '''
+    DiasPredicion = 360
     print(DiasPredicion)
 
     print(TodosMuertos.count())

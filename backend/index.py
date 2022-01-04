@@ -1358,10 +1358,10 @@ def Reporte13_1():
 
     # Prediccion desde el dia 0 hasta el dia que solicite
     x_new_min = 0.0
-    x_new_max = int(max(vedades))
+    x_new_max = int(max(vedades))+10
 
 
-    x_new = np.linspace(x_new_min, x_new_max, int(max(vedades)))
+    x_new = np.linspace(x_new_min, x_new_max, int(max(vedades))+10)
     x_new = x_new[:,np.newaxis]
 
     x_new_transform = polynomial_features.fit_transform(x_new)
@@ -1464,10 +1464,10 @@ def Reporte13_2():
 
     # Prediccion desde el dia 0 hasta el dia que solicite
     x_new_min = 0.0
-    x_new_max = int(max(vedades))
+    x_new_max = int(max(vedades))+10
 
 
-    x_new = np.linspace(x_new_min, x_new_max, int(max(vedades)))
+    x_new = np.linspace(x_new_min, x_new_max, int(max(vedades))+10)
     x_new = x_new[:,np.newaxis]
 
 
